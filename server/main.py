@@ -7,13 +7,17 @@ import jwt
 
 app = FastAPI()
 
-class User(BaseModel):
-    email: str
-    password: str
-
 @app.get("/")
 def hello():
     return {"ping": "pong"}
+
+# -------------------------
+# register and login logics
+# -------------------------
+
+class User(BaseModel):
+    email: str
+    password: str
 
 @app.post("/register")
 async def register(user: User):
@@ -39,5 +43,9 @@ async def login(user: User):
     
     return {"message": "Senha incorreta"}
     
+# -----------------------
+# pokemon register logics
+# -----------------------
     
+# class Pokemon(BaseModel):
 
