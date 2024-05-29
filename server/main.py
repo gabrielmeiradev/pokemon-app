@@ -11,9 +11,7 @@ app = FastAPI()
 def hello():
     return {"ping": "pong"}
 
-# -------------------------
 # register and login logics
-# -------------------------
 
 class User(BaseModel):
     email: str
@@ -43,9 +41,7 @@ async def login(user: User):
     
     return {"message": "Senha incorreta"}
     
-# -----------------------
 # pokemon register logics
-# -----------------------
     
 # class Pokemon(BaseModel):
 
