@@ -1,0 +1,10 @@
+@import "../global.css";
+
+body {
+    background-color: #EFEFEF;
+}
+
+.form {
+    width: 22vw;
+    min-width: 290px;
+}
