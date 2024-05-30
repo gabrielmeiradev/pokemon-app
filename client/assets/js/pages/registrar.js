@@ -20,6 +20,10 @@ const register = (email, password) => {
         showToast(data.message)
         location.href="login.html"
     })
+    .catch(() => {
+        showToast("Erro ao tentar entrar, tente novamente mais tarde")
+    })
+    
 }
 
 form.addEventListener("submit", (e) => {

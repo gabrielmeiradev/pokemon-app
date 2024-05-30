@@ -1,0 +1,20 @@
+@import "../global.css";
+
+body {
+    background-image: url("../../img/app-background.png");
+    background-size: cover;
+}
+
+.form {
+    width: 35vw;
+    min-width: 350px;
+    gap: 10px;
+}
+
+.form-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}

@@ -104,3 +104,33 @@ input {
     background-color: #386ABB;
     color: #fff;
 }
+
+.text-center {
+    text-align: center;
+}
+
+.pokemon-image {
+    border-radius: 50%;
+    border: 1px dashed #BBBBBB;
+    width: fit-content;
+    display: grid;
+    place-items: center;
+}
+
+.input-col-labeled {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-section {
+    scale: 0;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.form-section.active {
+    opacity: 1 !important;
+    scale: 1 !important;
+}

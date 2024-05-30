@@ -1,5 +1,6 @@
 import { env } from "../env.js";
 import { showToast } from "../utils.js";
+import { addOrGetToken } from "../db.js";
 
 const form = document.querySelector("#form");
 
@@ -17,7 +18,14 @@ const login = (email, password) => {
     })
     .then((res) => res.json())
     .then((data) => {
-        showToast(data.message)
+        showToast(data.message);
+        if(data.status == "success") {
+            addOrGetToken(data["token"]);
+            location.href = "./report/register.html"
+        }
+    })
+    .catch(() => {
+        showToast("Erro ao tentar entrar, tente novamente mais tarde")
     })
 }
 

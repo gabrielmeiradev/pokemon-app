@@ -35,7 +35,7 @@ class User(BaseModel):
 @app.post("/register")
 async def register(user: User):
     user_found = users.find_one({"email": user.email})
-    if user_found: return {"message": "Usuário já cadastrado"}
+    if user_found: return {"message": "Usuário já cadastrado", "status": "error"}
 
     hashed_pass = bcrypt.hashpw(user.password.encode("utf8"), bcrypt.gensalt())
     user_dict = {"email": user.email, "password": hashed_pass}
@@ -48,25 +48,26 @@ async def login(user: User):
     user_found = users.find_one({"email": user.email})
 
     if not user_found:
-        return {"message": "Usuário não encontrado"}
+        return {"message": "Usuário não encontrado", "status": "error"}
 
     if bcrypt.checkpw(user.password.encode("utf8"), user_found["password"]):
         jwt_token = jwt.encode({"email": user.email}, "secret", algorithm="HS256")
-        return {"message": "Usuário logado", "token": jwt_token}
+        return {"message": "Usuário logado", "token": jwt_token, "status": "success"}
     
-    return {"message": "Senha incorreta"}
+    return {"message": "Senha incorreta", "status": "error"}
     
 # pokemon register logics
 
 class PokemonLocation(BaseModel):
+    user_id: str
     pokemon_id: str
     latitude: float
     longitude: float
 
-
 @app.post("/location")
 async def insert_location(location: PokemonLocation):
     location_dict = {
+        "user_id": location.user_id,
         "location_id": str(uuid.uuid4()),
         "pokemon_id": location.pokemon_id,
         "latitude": location.latitude,
@@ -74,24 +75,25 @@ async def insert_location(location: PokemonLocation):
     }
 
     pokemons_locations.insert_one(location_dict)
-    return {"message": "Report inserido"}
+    return {"message": "Report inserido", "status": "success"}
 
 @app.delete("/location/{id}")
 async def delete_location(id):
     pokemons_locations.delete_one({"location_id": id})
-    return {"message": "Report deletado"}
+    return {"message": "Report deletado", "status": "success"}
 
 @app.put("/location/{id}")
 async def update_location(id, location: PokemonLocation):
     filter = { "location_id": id }
     new_values = { "$set": {
+        "user_id": location.user_id,
         "pokemon_id": location.pokemon_id,
         "latitude": location.latitude,
         "longitude": location.longitude
     }}
 
     pokemons_locations.update_one(filter, new_values)
-    return {"message": "Pokemon atualizado"}
+    return {"message": "Pokemon atualizado", "status": "success"}
 
 @app.get("/location/{id}")
 async def update_location(id):
