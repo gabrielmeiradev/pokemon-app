@@ -47,12 +47,6 @@ pokemonInput.addEventListener("input", async (e) => {
     if(e.target.value.length >= 2) return;
 })
 
-const handleZipCode = (event) => {
-    let input = event.target
-    input.value = zipCodeMask(input.value)
-}
-
-
 cepInput.addEventListener("keyup", (e) => {
     let input = e.target
     input.value = zipCodeMask(input.value)

@@ -6,8 +6,15 @@
     <title>Pokemon App</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../assets/style/static/app-pages.css'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body> 
+    <nav class="floating-nav">
+        <a href="/logout.html" class="item link-danger">
+            <span class="material-symbols-outlined">
+            logout
+        </span></a>
+    </nav>
     <div id="app">
         <form class="form app-container text-center" id="form">
             <div>
@@ -15,7 +22,7 @@
             </div>
             <div class="form-inputs text-center">
                 <div class="input-col-labeled form-section active" >
-                    <label>Pokemon</label>
+                    <label>Pokemon encontrado</label>
                     <input type="text" id="pokemon" placeholder="ID ou nome do Pokemon encontrado" autocomplete="off">
                 </div>
                 <span class="pokemon-image form-section">
