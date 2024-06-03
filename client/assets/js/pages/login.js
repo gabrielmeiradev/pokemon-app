@@ -21,7 +21,7 @@ const login = (email, password) => {
         showToast(data.message);
         if(data.status == "success") {
             addOrGetToken(data["token"]);
-            location.href = "./report/register.html"
+            location.href = "./report/index.html"
         }
     })
     .catch(() => {

@@ -6,8 +6,7 @@ import bcrypt
 import jwt
 import uuid
 from fastapi.middleware.cors import CORSMiddleware
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+from opencage.geocoder import OpenCageGeocode
 
 app = FastAPI()
 
@@ -60,32 +59,33 @@ async def login(user: User):
     
 # pokemon register logics
 
+OPEN_CAGE_kEY = "d2a0a2ad9eff46448e031fff773fd5ec"
+
 class PokemonLocation(BaseModel):
     user_id: str
     pokemon_id: str
     logradouro: str
-    bairro: str
+    numero: str
     cidade: str
     uf: str
 
 
 @app.post("/location")
-async def insert_location(location: PokemonLocation):
-    geolocator = Nominatim(user_agent="pokemap")
-    location = geolocator.geocode(location.logradouro + ", " + location.bairro + ", " + location.cidade + " - " + location.uf)
-    print(str(location))
+async def insert_location(l: PokemonLocation):
+    geocoder = OpenCageGeocode(OPEN_CAGE_kEY)
+    query = f"{l.logradouro}, {l.numero} - {l.cidade} - {l.uf}"
+    results = geocoder.geocode(query)
+    longitude = str(results[0]['geometry']['lng'])
+    latitude = str(results[0]['geometry']['lat'])
 
-    latitude = 2 # todo
-    longitude = 3 # todo
-    # location_dict = {
-    #     "user_id": location.user_id,
-    #     "location_id": str(uuid.uuid4()),
-    #     "pokemon_id": location.pokemon_id,
-    #     "latitude": latitude,
-    #     "longitude": longitude
-    # }
+    p_l_dict = {
+       "user_id": l.user_id,
+       "pokemon_id": l.pokemon_id,
+       "latitude": latitude,
+       "longitude": longitude 
+    }
 
-    # pokemons_locations.insert_one(location_dict)
+    pokemons_locations.insert_one(p_l_dict)
     return {"message": "Report inserido", "status": "success"}
 
 @app.delete("/location/{id}")
