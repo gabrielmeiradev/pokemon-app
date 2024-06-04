@@ -10,7 +10,7 @@
 </head>
 <body> 
     <nav class="floating-nav">
-        <a href="/logout.html" class="item link-danger">
+        <a class="item link-danger" id="logout">
             <span class="material-symbols-outlined">
             logout
         </span></a>
@@ -21,22 +21,22 @@
                 <img src="../assets/img/logo.png">
             </div>
             <div class="form-inputs text-center">
-                <div class="input-col-labeled form-section active" >
+                <div class="input-col-labeled form-section active">
                     <label>Pokemon encontrado</label>
-                    <input type="text" id="pokemon" placeholder="ID ou nome do Pokemon encontrado" autocomplete="off">
+                    <input type="text" id="pokemon" placeholder="ID ou nome do Pokemon encontrado" autocomplete="off" required>
                 </div>
                 <span class="pokemon-image form-section">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" id="pokemon-img">
                 </span>
                 <div class="input-col-labeled form-section">
                     <label>Localização</label>
-                    <input type="text" id="cep" placeholder="CEP" autocomplete="off" maxlength="9">
-                    <input type="number" id="numero" placeholder="Número do local">
+                    <input type="text" id="cep" placeholder="CEP" autocomplete="off" maxlength="9" required>
+                    <input type="number" id="numero" placeholder="Número do local" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Reportar Pokemon</button>
+                <button type="submit" class="btn btn-primary" id="report-btn" disabled>Reportar Pokemon</button>
             </div>
         </form>
     </div>
-    <script src='../assets/js/pages/report/index.js' type="module"></script>
+    <script src="../assets/js/pages/report/index.js" type="module"></script>
 </body>
 </html>

@@ -18,3 +18,21 @@ body {
     width: 100%;
     gap: 20px;
 }
+
+#map { 
+    height: 70vh;
+    width: 50vw;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: rgba(255, 255, 255, .8) !important;
+    backdrop-filter: blur(2px);
+}
+
+.pokemon-in-map {
+    width: 75px;
+}

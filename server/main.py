@@ -7,6 +7,8 @@ import jwt
 import uuid
 from fastapi.middleware.cors import CORSMiddleware
 from opencage.geocoder import OpenCageGeocode
+import json
+from datetime import datetime
 
 app = FastAPI()
 
@@ -22,6 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+JWT_SECRET = "secret"
 
 @app.get("/")
 def hello():
@@ -52,7 +55,8 @@ async def login(user: User):
         return {"message": "Usuário não encontrado", "status": "error"}
 
     if bcrypt.checkpw(user.password.encode("utf8"), user_found["password"]):
-        jwt_token = jwt.encode({"email": user.email}, "secret", algorithm="HS256")
+        jwt_token = jwt.encode({"email": user.email}, JWT_SECRET, algorithm="HS256")
+        print(jwt_token)
         return {"message": "Usuário logado", "token": jwt_token, "status": "success"}
     
     return {"message": "Senha incorreta", "status": "error"}
@@ -60,9 +64,8 @@ async def login(user: User):
 # pokemon register logics
 
 OPEN_CAGE_kEY = "d2a0a2ad9eff46448e031fff773fd5ec"
-
 class PokemonLocation(BaseModel):
-    user_id: str
+    user_token: str
     pokemon_id: str
     logradouro: str
     numero: str
@@ -78,11 +81,16 @@ async def insert_location(l: PokemonLocation):
     longitude = str(results[0]['geometry']['lng'])
     latitude = str(results[0]['geometry']['lat'])
 
+    user_email = jwt.decode(l.user_token, JWT_SECRET, algorithms="HS256")["email"]
+
+    user_id = users.find_one({"email": user_email})["_id"]
+
     p_l_dict = {
-       "user_id": l.user_id,
+       "user_id": str(user_id),
        "pokemon_id": l.pokemon_id,
        "latitude": latitude,
-       "longitude": longitude 
+       "longitude": longitude,
+       "datetime": datetime.now()
     }
 
     pokemons_locations.insert_one(p_l_dict)
@@ -105,6 +113,14 @@ async def update_location(id, location: PokemonLocation):
 
     pokemons_locations.update_one(filter, new_values)
     return {"message": "Pokemon atualizado", "status": "success"}
+
+@app.get("/locations")
+async def get_all_locations():
+    result = pokemons_locations.find({}, {'_id': 0})
+    out = []
+    for location in result:
+        out.append(location)
+    return out
 
 @app.get("/location/{id}")
 async def update_location(id):

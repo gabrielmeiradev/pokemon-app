@@ -100,6 +100,12 @@ input {
     border: none;
     cursor: pointer;
     transition: .2s ease;
+    opacity: 1;
+}
+
+.btn:disabled {
+    cursor: default;
+    opacity: .5;
 }
 
 .btn-primary {
@@ -165,6 +171,7 @@ input {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 1px 1px 10px 17px rgb(0 0 0 / 7%);
 }
 
 .floating-nav > a {

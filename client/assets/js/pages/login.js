@@ -1,6 +1,6 @@
-import { env } from "../env.js";
+import { env } from "../config/env.js";
 import { showToast } from "../utils.js";
-import { addOrGetToken } from "../db.js";
+import { setToken } from "../config/db.js";
 
 const form = document.querySelector("#form");
 
@@ -20,7 +20,7 @@ const login = (email, password) => {
     .then((data) => {
         showToast(data.message);
         if(data.status == "success") {
-            addOrGetToken(data["token"]);
+            setToken(data["token"]);
             location.href = "./report/index.html"
         }
     })
