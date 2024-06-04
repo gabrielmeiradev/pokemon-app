@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from opencage.geocoder import OpenCageGeocode
 import json
 from datetime import datetime
+from bson import ObjectId
 
 app = FastAPI()
 
@@ -55,8 +56,7 @@ async def login(user: User):
         return {"message": "Usuário não encontrado", "status": "error"}
 
     if bcrypt.checkpw(user.password.encode("utf8"), user_found["password"]):
-        jwt_token = jwt.encode({"email": user.email}, JWT_SECRET, algorithm="HS256")
-        print(jwt_token)
+        jwt_token = jwt.encode({"email": user.email, "user_id": str(user_found["_id"])}, JWT_SECRET, algorithm="HS256")
         return {"message": "Usuário logado", "token": jwt_token, "status": "success"}
     
     return {"message": "Senha incorreta", "status": "error"}
@@ -68,6 +68,7 @@ class PokemonLocation(BaseModel):
     user_token: str
     pokemon_id: str
     logradouro: str
+    cep: str
     numero: str
     cidade: str
     uf: str
@@ -88,6 +89,8 @@ async def insert_location(l: PokemonLocation):
     p_l_dict = {
        "user_id": str(user_id),
        "pokemon_id": l.pokemon_id,
+       "cep": l.cep,
+       "numero": l.numero,
        "latitude": latitude,
        "longitude": longitude,
        "datetime": datetime.now()
@@ -102,30 +105,38 @@ async def delete_location(id):
     return {"message": "Report deletado", "status": "success"}
 
 @app.put("/location/{id}")
-async def update_location(id, location: PokemonLocation):
-    filter = { "location_id": id }
+async def update_location(id, l: PokemonLocation):
+    geocoder = OpenCageGeocode(OPEN_CAGE_kEY)
+    query = f"{l.logradouro}, {l.numero} - {l.cidade} - {l.uf}"
+    results = geocoder.geocode(query)
+    longitude = str(results[0]['geometry']['lng'])
+    latitude = str(results[0]['geometry']['lat'])
+    filter = { "_id": ObjectId(id) }
+    user_email = jwt.decode(l.user_token, JWT_SECRET, algorithms="HS256")["email"]
+    user_id = users.find_one({"email": user_email})["_id"]
     new_values = { "$set": {
-        "user_id": location.user_id,
-        "pokemon_id": location.pokemon_id,
-        "latitude": location.latitude,
-        "longitude": location.longitude
+        "user_id": str(user_id),
+        "cep": l.cep,
+        "pokemon_id": l.pokemon_id,
+        "latitude": latitude,
+        "longitude": longitude
     }}
 
     pokemons_locations.update_one(filter, new_values)
     return {"message": "Pokemon atualizado", "status": "success"}
 
-@app.get("/locations")
-async def get_all_locations():
-    result = pokemons_locations.find({}, {'_id': 0})
-    out = []
-    for location in result:
-        out.append(location)
-    return out
-
 @app.get("/location/{id}")
 async def update_location(id):
-    pokemon_location = pokemons_locations.find_one({"location_id": id}, {"_id": 0})
-    return pokemon_location 
+    filter = { "_id": ObjectId(id) }
+    result = pokemons_locations.find_one(filter, {"_id": 0})
+    return result
 
-
+@app.get("/locations")
+async def get_all_locations():
+    result = pokemons_locations.find({}).sort("datetime", 1)
+    out = []
+    for location in result:
+        location["_id"] = str(location["_id"])
+        out.append(location)
+    return out
 

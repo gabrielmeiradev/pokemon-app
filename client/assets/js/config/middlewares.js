@@ -1,34 +1,29 @@
-const fetchMiddleware = () => {
-    self.addEventListener('fetch', function(event) {
-        event.respondWith(
-            (async function() {
-                const tokenAqui = await dbGet('token');  
-                const headers = new Headers(event.request.headers);
-               headers.append('Authorization', `Bearer ${tokenAqui.token}`);
-                
-                const requisicaoModificada= new Request(event.request, {
-                    method: event.request.method,
-                    headers: headers,
-                    body: event.request.body
-                });
-    
-                const requisicaoCache= await caches.match(requisicaoModificada);
-                if (requisicaoCache) {
-                    return requisicaoCache;
-                }
-    
-                const requisicaoRede= await fetch(requisicaoModificada);
-                const cache = await caches.open(CACHE_NAME);
-    
-                cache.put(event.request, requisicaoRede.clone());  
-                return requisicaoRede;
-            })()
-        );
-    });
+import { env } from "./env.js";
+
+const fetchMiddleware = async () => {
+    if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register(env.CLIENT_URL + "/assets/js/config/sw.js");
+          if (registration.installing) {
+            console.log("Service worker installing");
+          } else if (registration.waiting) {
+            console.log("Service worker installed");
+          } else if (registration.active) {
+            console.log("Service worker active");
+          }
+        } catch (error) {
+          console.error(`Registration failed with ${error}`);
+        }
+    }
 }
 
 export const middlewares = {
-    private: {
+    _private: {
         fetch: fetchMiddleware
+    },
+    private: () =>  {
+        Object.keys(middlewares._private).forEach((key) => {
+            middlewares._private[key]()
+        })
     }
 }

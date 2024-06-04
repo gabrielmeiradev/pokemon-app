@@ -12,15 +12,16 @@
     <nav class="floating-nav">
         <a class="item link-danger" id="logout">
             <span class="material-symbols-outlined">
-            logout
-        </span></a>
+                logout
+            </span>
+        </a>
     </nav>
     <div id="app">
         <div class="map-header left">
             <div class="logo-with-text">
                 <img src="../assets/img/logo.png">
                 <span>|</span>
-                <span>Criando report</span>
+                <span>Editando report</span>
             </div>
             <div class="map-header-links">
                 <a href="map.html" class="map-header-link">
@@ -39,18 +40,18 @@
                     <label>Pokemon encontrado</label>
                     <input type="text" id="pokemon" placeholder="ID ou nome do Pokemon encontrado" autocomplete="off" required>
                 </div>
-                <span class="pokemon-image form-section">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" id="pokemon-img">
+                <span class="pokemon-image form-section active">
+                    <img src="" id="pokemon-img">
                 </span>
-                <div class="input-col-labeled form-section">
+                <div class="input-col-labeled form-section active">
                     <label>Localização</label>
                     <input type="text" id="cep" placeholder="CEP" autocomplete="off" maxlength="9" required>
                     <input type="number" id="numero" placeholder="Número do local" required>
                 </div>
-                <button type="submit" class="btn btn-primary" id="report-btn" disabled>Reportar Pokemon</button>
+                <button type="submit" class="btn btn-primary" id="report-btn">Atualizar registro</button>
             </div>
         </form>
     </div>
-    <script src="../assets/js/pages/report/index.js" type="module"></script>
+    <script src="../assets/js/pages/report/edit.js" type="module"></script>
 </body>
 </html>

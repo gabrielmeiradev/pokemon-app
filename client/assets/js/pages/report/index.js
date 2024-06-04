@@ -14,6 +14,7 @@ const formSections = document.querySelectorAll(".form-section");
 const formBody = {
     user_token: "",
     pokemon_id: "",
+    cep: "",
     logradouro: "",
     numero: "",
     cidade: "",
@@ -89,6 +90,7 @@ cepInput.addEventListener("keyup", (e) => {
                 formBody.logradouro = data["logradouro"] 
                 formBody.cidade = data["localidade"] 
                 formBody.uf = data["uf"] 
+                formBody.cep = input.value
             })
     }
 })
@@ -102,7 +104,7 @@ form.addEventListener("input", () => {
 
 form.addEventListener("submit", (e) => {
     e.preventDefault()
-    fetch(env.BASE_URL + "/location", {
+    fetch(env.SERVER_URL + "/location", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -110,5 +112,7 @@ form.addEventListener("submit", (e) => {
         body: JSON.stringify(formBody)
     })
     .then((res) => res.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+        location.href = "map.html"
+    })
 })

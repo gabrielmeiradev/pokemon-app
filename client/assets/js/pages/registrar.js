@@ -4,7 +4,7 @@ import { showToast } from "../utils.js";
 const form = document.querySelector("#form");
 
 const register = (email, password) => {
-    const endpoint = `${env.BASE_URL}/register`
+    const endpoint = `${env.SERVER_URL}/register`
     fetch(endpoint, {
         method: "POST",
         headers: {

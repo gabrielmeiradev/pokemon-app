@@ -5,7 +5,7 @@ import { setToken } from "../config/db.js";
 const form = document.querySelector("#form");
 
 const login = (email, password) => {
-    const endpoint = `${env.BASE_URL}/login`
+    const endpoint = `${env.SERVER_URL}/login`
     fetch(endpoint, {
         method: "POST",
         headers: {

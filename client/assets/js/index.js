@@ -5,6 +5,7 @@ export const loadDependencies = async (isPrivateRoute = false) => {
     if(isPrivateRoute) {
         try {
             await getToken()
+            middlewares.private();
         } catch (e) {
             location.href = "../login.html"
             console.log(e)
