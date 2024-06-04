@@ -3,7 +3,7 @@ import { env } from "../../config/env.js";
 import { loadDependencies } from "../../index.js";
 import { parseJwt, relativeTime } from "../../utils.js";
 
-var map = L.map('map').setView([-23.5661786, -46.4725614], 12);
+var map = L.map('map').setView([-23.5661786, -46.4725614], 15);
 
 window.onload = async () => {
 

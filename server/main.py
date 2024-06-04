@@ -101,7 +101,7 @@ async def insert_location(l: PokemonLocation):
 
 @app.delete("/location/{id}")
 async def delete_location(id):
-    pokemons_locations.delete_one({"location_id": id})
+    pokemons_locations.delete_one({"_id": ObjectId(id)})
     return {"message": "Report deletado", "status": "success"}
 
 @app.put("/location/{id}")

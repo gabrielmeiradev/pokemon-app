@@ -79,7 +79,7 @@ input {
     border-color: #386ABB;
 }
 
-.form button[type="submit"] {
+.form button[type="submit"], .form button[type="button"] {
     width: 100%;
 }
 
@@ -114,18 +114,18 @@ input {
 }
 
 .btn-danger-outlined {
-    color: #e50202;
-    border: 1px solid #e50202;
+    color: #9b0a0a;
+    border: 1px solid #9b0a0a;
     background: none;
 }
 
 .btn-danger-outlined:hover {
     color: #fff;
-    background: #e50202;
+    background: #9b0a0a;
 }
 
 .link-danger {
-    color: #e50202;
+    color: #9b0a0a;
 }
 
 .text-center {
@@ -151,6 +151,13 @@ input {
     scale: 0;
     opacity: 0;
     transition: .2s ease;
+}
+
+.form-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .form-section.active {

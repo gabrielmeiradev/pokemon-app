@@ -23,7 +23,9 @@ const formBody = {
 
 const setPokemonDetails = async (id) => {
     id = id.toLowerCase();
+   
     let res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    if(!res.ok) return;
     res = await res.json();
 
     const pokemon = {
@@ -39,12 +41,16 @@ const setPokemonDetails = async (id) => {
 
 window.onload = () => {
     fetch(`${env.SERVER_URL}/location/${location_id}`)
-        .then((res) => res.json())
+        .then((res) => {
+            return res.json()
+        })
         .then(async (location) => {
             cepInput.value = location.cep;
             numeroInput.value = location.numero;
             setPokemonDetails(location.pokemon_id);
-
+        })
+        .catch((e) => {
+            location.href="map.html";
         })
 }
 
@@ -92,4 +98,17 @@ form.addEventListener("submit", async (e) => {
     }
 
     
+})
+
+const deleteButton = document.querySelector("#delete-btn");
+
+deleteButton.addEventListener("click", () => {
+    fetch(`${env.SERVER_URL}/location/${location_id}`,
+         {
+            method: "DELETE"
+         }
+    ).then((res) => res.json())
+    .then(() => {
+        location.href="map.html";
+    })
 })
