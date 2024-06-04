@@ -1,4 +1,4 @@
-import { env } from "../env.js";
+import { env } from "../config/env.js";
 import { showToast } from "../utils.js";
 
 const form = document.querySelector("#form");

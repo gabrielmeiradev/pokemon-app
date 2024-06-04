@@ -20,8 +20,9 @@ const formBody = {
     uf: ""
 }
 
+
 window.onload = async () => {
-    loadDependencies(true);
+    await loadDependencies(true);
     formBody.user_token = await getToken();
 }
 
