@@ -1,31 +1,43 @@
-self.addEventListener("install", () => {
-    console.log("dsadsa")
-})
+const CACHE_NAME_STATIC = "cache";
+const CACHE_NAME_DYNAMIC = "dynamic";
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener("install", function (event) {
+  console.log("Instalando o Service Worker...");
+  event.waitUntil(
+    caches.open(CACHE_NAME_STATIC).then(function (cache) {
+      console.log(cache)
+    })
+  );
+});
+
+self.addEventListener("activate", function (event) {
+  console.log("Ativando o Service Worker");
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys.map(function (key) {
+          if (key !== CACHE_NAME_STATIC && key !== CACHE_NAME_DYNAMIC) {
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+});
+
+self.addEventListener("fetch", function (event) {
+  if (event.request.method !== "GET") {
     event.respondWith(
-        (async function() {
-            console.log("aaaaaa")
-        //     const tokenAqui = await dbGet('token');  
-        //     const headers = new Headers(event.request.headers);
-        //     headers.append('Authorization', `Bearer ${tokenAqui.token}`);
-            
-        //     const requisicaoModificada= new Request(event.request, {
-        //         method: event.request.method,
-        //         headers: headers,
-        //         body: event.request.body
-        //     });
-
-        //     const requisicaoCache= await caches.match(requisicaoModificada);
-        //     if (requisicaoCache) {
-        //         return requisicaoCache;
-        //     }
-
-        //     const requisicaoRede= await fetch(requisicaoModificada);
-        //     const cache = await caches.open(CACHE_NAME);
-
-        //     cache.put(event.request, requisicaoRede.clone());  
-        //     return requisicaoRede;
-        })()
+      fetch(event.request)
+        .then(function (res) {
+          return caches.open(CACHE_NAME_DYNAMIC).then(function (cache) {
+            cache.put(event.request.url, res.clone());
+            return res;
+          });
+        })
+        .catch(function (err) {
+          return caches.match(event.request);
+        })
     );
+  }
 });

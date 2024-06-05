@@ -5,14 +5,14 @@ const fetchMiddleware = async () => {
         try {
           const registration = await navigator.serviceWorker.register(env.CLIENT_URL + "/assets/js/config/sw.js");
           if (registration.installing) {
-            console.log("Service worker installing");
+            console.log("Service worker sendo instalado");
           } else if (registration.waiting) {
-            console.log("Service worker installed");
+            console.log("Service worker instalado");
           } else if (registration.active) {
-            console.log("Service worker active");
+            console.log("Service worker ativo");
           }
         } catch (error) {
-          console.error(`Registration failed with ${error}`);
+          console.error(`Registro com erro: ${error}`);
         }
     }
 }
