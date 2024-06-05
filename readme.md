@@ -30,6 +30,11 @@ Reports de pokémons
 Sobre o JWT, após o usuário realizar o login, é gerado um token, que por sua
 vez é salvo utilizando IndexedDB
 
+## Client Setup
+- Instale a extensão Live Server no VSCode
+- Clique no arquivo client/index.html com o botão direito
+- Clique em Open With Live Server
+
 ## Server setup
 - cd server
 - python -m venv env
